@@ -80,7 +80,7 @@ CREATE INDEX event_addresses_event_id_address_id_event_maturity_height_event_id_
 
 CREATE TABLE wallets (
 	id INTEGER PRIMARY KEY,
-	friendly_name TEXT NOT NULL,
+	friendly_name UNIQUE TEXT NOT NULL,
 	description TEXT NOT NULL,
 	date_created INTEGER NOT NULL,
 	last_updated INTEGER NOT NULL,
