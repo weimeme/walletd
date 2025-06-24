@@ -87,7 +87,7 @@ CREATE TABLE wallets (
 	extra_data BLOB
 );
 
--- 这个表把wallet_id改成唯一， 怎么做？
+-- 这个表把wallet_id改成唯一
 CREATE TABLE wallet_addresses (
 	wallet_id INTEGER NOT NULL REFERENCES wallets (id),
 	address_id INTEGER NOT NULL REFERENCES sia_addresses (id),
