@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  walletd:
+    build: .
+    container_name: walletd
+    ports:
+      - "127.0.0.1:9980:9980/tcp"
+      - "9981:9981"
+    volumes:
+      - ./data:/data
+    environment:
+      - WALLETD_API_PASSWORD: "weaver"
+    restart: unless-stopped 
