@@ -106,6 +106,7 @@ type (
 		RemoveAddress(id wallet.ID, addr types.Address) error
 		Addresses(id wallet.ID) ([]wallet.Address, error)
 		WalletAddress(wallet.ID, types.Address) (wallet.Address, error)
+		GetWalletIDByName(name string) (wallet.ID, error)
 		WalletEvents(id wallet.ID, offset, limit int) ([]wallet.Event, error)
 		WalletUnconfirmedEvents(id wallet.ID) ([]wallet.Event, error)
 		SelectSiacoinElements(walletID wallet.ID, amount types.Currency, useUnconfirmed bool) ([]wallet.UnspentSiacoinElement, types.ChainIndex, types.Currency, error)
@@ -703,6 +704,15 @@ func (s *server) walletsEventsHandler(jc jape.Context) {
 		return
 	}
 	jc.Encode(events)
+}
+
+// GetWalletIDByName 根据wallet name查询wallet id
+func (s *server) walletIdByNameHandlerGET(jc jape.Context) {
+	var name string
+	if jc.DecodeParam("name", &name) != nil {
+		return
+	}
+	jc.Encode(s.wm.GetWalletIDByName(name))
 }
 
 func (s *server) walletsEventsUnconfirmedHandlerGET(jc jape.Context) {
@@ -1723,6 +1733,8 @@ func NewServer(cm ChainManager, s Syncer, wm WalletManager, opts ...ServerOption
 		"POST /wallets/:id/release":                  wrapAuthHandler(srv.walletsReleaseHandler),
 		"POST /wallets/:id/fund":                     wrapAuthHandler(srv.walletsFundHandler),
 		"POST /wallets/:id/fundsf":                   wrapAuthHandler(srv.walletsFundSFHandler),
+		// /wallets-byname/${address}/id 根据地址查询wallet id
+		"GET /wallets-byname/:address/id":            wrapAuthHandler(srv.walletsByNameHandlerGET),
 	}
 
 	if srv.debugEnabled {

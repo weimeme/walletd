@@ -89,6 +89,7 @@ type (
 		WalletSiacoinOutputs(walletID ID, offset, limit int) ([]UnspentSiacoinElement, types.ChainIndex, error)
 		WalletSiafundOutputs(walletID ID, offset, limit int) ([]UnspentSiafundElement, types.ChainIndex, error)
 		WalletAddresses(walletID ID) ([]Address, error)
+		GetWalletIDByName(name string) (ID, error)
 		Wallets() ([]Wallet, error)
 
 		AddWalletAddresses(walletID ID, addresses ...Address) error
@@ -281,6 +282,11 @@ func (m *Manager) RemoveAddress(walletID ID, addr types.Address) error {
 // Addresses returns the addresses of the given wallet.
 func (m *Manager) Addresses(walletID ID) ([]Address, error) {
 	return m.store.WalletAddresses(walletID)
+}
+
+// GetWalletIDByName returns the wallet id by name
+func (m *Manager) GetWalletIDByName(name string) (ID, error) {
+	return m.store.GetWalletIDByName(name)
 }
 
 // WalletEvents returns the events of the given wallet.

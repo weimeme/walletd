@@ -218,6 +218,15 @@ WHERE wa.wallet_id=$1 AND sa.sia_address=$2`
 	return
 }
 
+// 根据wallet name查询wallet id
+func (s *Store) GetWalletIDByName(name string) (id wallet.ID, err error) {
+	err = s.transaction(func(tx *txn) error {
+		const query = `SELECT id FROM wallets WHERE friendly_name=$1`
+		return tx.QueryRow(query, name).Scan(&id)
+	})
+	return
+}
+
 // WalletAddresses returns a slice of addresses registered to the wallet.
 func (s *Store) WalletAddresses(id wallet.ID) (addresses []wallet.Address, err error) {
 	err = s.transaction(func(tx *txn) error {
