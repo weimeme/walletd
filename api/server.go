@@ -712,7 +712,12 @@ func (s *server) walletIdByNameHandlerGET(jc jape.Context) {
 	if jc.DecodeParam("name", &name) != nil {
 		return
 	}
-	jc.Encode(s.wm.GetWalletIDByName(name))
+	id, err := s.wm.GetWalletIDByName(name)	
+	if err != nil {
+		jc.Error(err, http.StatusInternalServerError)
+		return
+	}
+	jc.Encode(id)
 }
 
 func (s *server) walletsEventsUnconfirmedHandlerGET(jc jape.Context) {
