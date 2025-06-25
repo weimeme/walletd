@@ -1733,8 +1733,7 @@ func NewServer(cm ChainManager, s Syncer, wm WalletManager, opts ...ServerOption
 		"POST /wallets/:id/release":                  wrapAuthHandler(srv.walletsReleaseHandler),
 		"POST /wallets/:id/fund":                     wrapAuthHandler(srv.walletsFundHandler),
 		"POST /wallets/:id/fundsf":                   wrapAuthHandler(srv.walletsFundSFHandler),
-		// /wallets-byname/${address}/id 根据地址查询wallet id
-		"GET /wallets-byname/:address/id":            wrapAuthHandler(srv.walletsByNameHandlerGET),
+		"GET /wallets-byname/:address/id":            wrapAuthHandler(srv. walletIdByNameHandlerGET),
 	}
 
 	if srv.debugEnabled {
