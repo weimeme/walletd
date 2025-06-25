@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.3'
 services:
   walletd:
     build: .
@@ -9,5 +9,5 @@ services:
     volumes:
       - ./data:/data
     environment:
-      - WALLETD_API_PASSWORD: "weaver"
+      WALLETD_API_PASSWORD: "weaver"
     restart: unless-stopped 
