@@ -238,8 +238,8 @@ func (c *Client) RemoveWallet(id wallet.ID) (err error) {
 
 // GetWalletIDByName 根据wallet name查询wallet id
 // "GET /wallets-byname/:address/id"
-func (c *Client) GetWalletIDByName(address string) (id wallet.ID, err error) {
-	err = c.c.GET(context.Background(), fmt.Sprintf("/wallets-byname/%s/id", address), &id)
+func (c *Client) GetWalletIDByName(name string) (id wallet.ID, err error) {
+	err = c.c.GET(context.Background(), fmt.Sprintf("/wallets-byname/%s/id", name), &id)
 	return
 }
 

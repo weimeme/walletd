@@ -1738,7 +1738,7 @@ func NewServer(cm ChainManager, s Syncer, wm WalletManager, opts ...ServerOption
 		"POST /wallets/:id/release":                  wrapAuthHandler(srv.walletsReleaseHandler),
 		"POST /wallets/:id/fund":                     wrapAuthHandler(srv.walletsFundHandler),
 		"POST /wallets/:id/fundsf":                   wrapAuthHandler(srv.walletsFundSFHandler),
-		"GET /wallets-byname/:address/id":            wrapAuthHandler(srv. walletIdByNameHandlerGET),
+		"GET /wallets-byname/:name/id":            wrapAuthHandler(srv. walletIdByNameHandlerGET),
 	}
 
 	if srv.debugEnabled {
