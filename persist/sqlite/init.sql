@@ -80,7 +80,7 @@ CREATE INDEX event_addresses_event_id_address_id_event_maturity_height_event_id_
 
 CREATE TABLE wallets (
 	id INTEGER PRIMARY KEY,
-	friendly_name UNIQUE TEXT NOT NULL,
+	friendly_name TEXT UNIQUE NOT NULL,
 	description TEXT NOT NULL,
 	date_created INTEGER NOT NULL,
 	last_updated INTEGER NOT NULL,
@@ -94,7 +94,8 @@ CREATE TABLE wallet_addresses (
 	description TEXT NOT NULL,
 	spend_policy BLOB,
 	extra_data BLOB,
-	UNIQUE (wallet_id, address_id)
+	UNIQUE (wallet_id)
+	-- UNIQUE (wallet_id, address_id)
 );
 CREATE INDEX wallet_addresses_wallet_id_idx ON wallet_addresses (wallet_id);
 CREATE INDEX wallet_addresses_address_id_idx ON wallet_addresses (address_id);
