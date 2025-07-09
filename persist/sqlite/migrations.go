@@ -7,6 +7,40 @@ import (
 	"go.uber.org/zap"
 )
 
+func migrateVersion9(tx *txn, _ *zap.Logger) error {
+	// Fix wallet_addresses table constraint from UNIQUE (wallet_id) to UNIQUE (wallet_id, address_id)
+	// This allows multiple addresses per wallet instead of only one address per wallet
+	const query = `
+-- Create new table with correct constraint
+CREATE TABLE wallet_addresses_new (
+	wallet_id INTEGER NOT NULL REFERENCES wallets (id),
+	address_id INTEGER NOT NULL REFERENCES sia_addresses (id),
+	description TEXT NOT NULL,
+	spend_policy BLOB,
+	extra_data BLOB,
+	UNIQUE (wallet_id, address_id)
+);
+
+-- Copy existing data
+INSERT INTO wallet_addresses_new (wallet_id, address_id, description, spend_policy, extra_data)
+SELECT wallet_id, address_id, description, spend_policy, extra_data 
+FROM wallet_addresses;
+
+-- Drop old table
+DROP TABLE wallet_addresses;
+
+-- Rename new table
+ALTER TABLE wallet_addresses_new RENAME TO wallet_addresses;
+
+-- Recreate indexes
+CREATE INDEX wallet_addresses_wallet_id_idx ON wallet_addresses (wallet_id);
+CREATE INDEX wallet_addresses_address_id_idx ON wallet_addresses (address_id);
+CREATE INDEX wallet_addresses_wallet_id_address_id_idx ON wallet_addresses (wallet_id, address_id);
+`
+	_, err := tx.Exec(query)
+	return err
+}
+
 func migrateVersion8(tx *txn, _ *zap.Logger) error {
 	_, err := tx.Exec(`CREATE TABLE signing_keys (
 	public_key BLOB PRIMARY KEY,
@@ -209,4 +243,5 @@ var migrations = []func(tx *txn, log *zap.Logger) error{
 	migrateVersion6,
 	migrateVersion7,
 	migrateVersion8,
+	migrateVersion9,
 }
