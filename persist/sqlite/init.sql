@@ -94,8 +94,7 @@ CREATE TABLE wallet_addresses (
 	description TEXT NOT NULL,
 	spend_policy BLOB,
 	extra_data BLOB,
-	UNIQUE (wallet_id)
-	-- UNIQUE (wallet_id, address_id)
+	UNIQUE (wallet_id, address_id)
 );
 CREATE INDEX wallet_addresses_wallet_id_idx ON wallet_addresses (wallet_id);
 CREATE INDEX wallet_addresses_address_id_idx ON wallet_addresses (address_id);
